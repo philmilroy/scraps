@@ -61,9 +61,9 @@ Notes:
 Installation instructions:
 -------------------------
 
-01) Ensure all prerequisites are met
-02) Ensure you save the Powershell script and xml file in the same directory
-03) Open the XML file with your favourite editor and fill in the following sections
+- 01 Ensure all prerequisites are met
+- 02 Ensure you save the Powershell script and xml file in the same directory
+- 03 Open the XML file with your favourite editor and fill in the following sections
 
 	- scriptOperations - scriptOp # of the 9 available options, you should set 1 to true and ensure the others are set to false
 		- The operation set to true in the XML will be the operation performed on the vROps cluster
@@ -104,8 +104,8 @@ Installation instructions:
 	- vropsInsecureStorage - password # You may INSECURELY store the encryption key here to allow a fully automated script
 		- Enter the 16 digit encryption key in plain text
 
-04) Run the script in Powershell ISE and enter your encryption key
-05) Depending on the operation selected, enter any requested passwords
+- 04 Run the script in Powershell ISE and enter your encryption key
+- 05 Depending on the operation selected, enter any requested passwords
 
 Example Run to restart the vROps cluster:
 ----------------------------------------
@@ -116,8 +116,8 @@ Example Run to restart the vROps cluster:
 		- 2 x 'main' Data nodes (configured as Remote Collectors)
 		- 1 x vCenter hosting all nodes
 
-01) Save .ps1 and XML into required folder
-02) Open XML in editor
+- 01 Save .ps1 and XML into required folder
+- 02 Open XML in editor
 	- Modify scriptOp - clusterOp - Restart_Cluster - requested = true
 		- All other scriptOp settings should already be set to false
 	- Add vcenterMain fqdn
@@ -130,11 +130,11 @@ Example Run to restart the vROps cluster:
 	(all my nodes are 'main' nodes so nothing in either remoteNodes groups)
 	(technically I don't need to enter vCenter details because cluster restart only uses vROps but it will save time later)
 	- Save XML
-03) Run .ps1 in Powershell ISE
-04) Enter a 16 digit encryption key. This can theoretically be anything you like but I haven't tested all combinations of special characters. I have tested a key of $$$$$$$$########
-05) Enter a password for the vROps account (the password for username set in vropsMain - username)
-06) (Cluster restart operation should begin)
-07) Open XML in editor (optional)
+- 03 Run .ps1 in Powershell ISE
+- 04 Enter a 16 digit encryption key. This can theoretically be anything you like but I haven't tested all combinations of special characters. I have tested a key of $$$$$$$$########
+- 05 Enter a password for the vROps account (the password for username set in vropsMain - username)
+- 06 (Cluster restart operation should begin)
+- 07 Open XML in editor (optional)
 	- Modify vropsInsecureStorage - password and enter the SAME encryption key you used during step 04
 	- Save XML
 
@@ -143,14 +143,14 @@ Example Run to restart all nodes and bring cluster back online:
 
 	- Prerequisite is to follow the example above first
 
-01) Open XML in editor
+- 01 Open XML in editor
 	- Modify scriptOp - clusterOp - Restart_Cluster - requested = false
 	- Modify scriptOp - clusterOp - Reboot_All_Nodes_Bring_Cluster_Online - requested = true
-02) Run .ps1 in Powershell ISE
+- 02 Run .ps1 in Powershell ISE
 	- If encryption key was not entered into XML you will be prompted for it
-03) Enter password for the vCenter account (the password for username set in vcenterMain username). Cluster offline will already be performed by the time you're prompted for this
-04) Node shutdown and restart will commence
-05) Cluster online will occur after all nodes have started successfully and a 30 second pause has elapsed
+- 03 Enter password for the vCenter account (the password for username set in vcenterMain username). Cluster offline will already be performed by the time you're prompted for this
+- 04 Node shutdown and restart will commence
+- 05 Cluster online will occur after all nodes have started successfully and a 30 second pause has elapsed
 
 Approximate time taken to perform this operation = 20 minutes for a 4 node setup running on SSD's
 
