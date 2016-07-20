@@ -93,13 +93,14 @@ Installation instructions:
 			- The default XML has space for 2 Data nodes. If none exist, do not enter any values
 
 	- remoteNodesGroup02vcenter
+		- If no Data nodes exist here, do not enter any values
 		- hostname # fqdn of the vCenter serving VM's from remoteNodesGroup02
 		- username # username for the remoteNodesGroup02 vCenter
-			- Additional Data nodes may be added by including a full rNode tag along with the hostname sub-tag
-			- The default XML has space for 2 Data nodes. If none exist, do not enter any values
 
 	- remoteNodesGroup02
 		- rNode - hostname # fqdn of any Remote Collectors for remoteNodesGroup02
+			- Additional Data nodes may be added by including a full rNode tag along with the hostname sub-tag
+			- The default XML has space for 2 Data nodes. If none exist, do not enter any values		
 
 	- vropsInsecureStorage - password # You may INSECURELY store the encryption key here to allow a fully automated script
 		- Enter the 16 digit encryption key in plain text
