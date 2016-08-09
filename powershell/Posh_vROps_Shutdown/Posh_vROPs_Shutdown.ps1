@@ -274,7 +274,7 @@
     } # end fnIESleeper
 
     # This function will take  the vROPs Cluster Offline or bring it Online based on the parameters passed
-    function fnClusterOps ($strvROPsHost, $strOperation, $objCreds, $intTimeoutInMinutes, $strvROpsUsername, $strvROpsPassword) {
+    function fnClusterOps ($strvROPsHost, $strOperation, $objCreds, $intTimeoutInMinutes) {
         if (!$strvROPsHost) { $msg = "ERROR - fnClusterOps called with no vROps Host"; fnLogData $msg $logfile; throw $msg }
         if ( (!$strOperation) -or ($strOperation -ne "ONLINE") -and ($strOperation -ne "OFFLINE") ) { $msg = "ERROR - fnClusterOps called with invalid Operation"; fnLogData $msg $logfile; throw $msg }
         if (!$objCreds -and $objCreds.GetType().Name -ne "PSCredential") { $msg = "ERROR - Invalid fnClusterOps called with invalid credentials"; fnLogData $msg $logfile; throw $msg }
@@ -360,8 +360,8 @@
     } # end if
     # Making a PSCredential Object for vROPs
     $objvROPsCreds = New-Object System.Management.Automation.PSCredential($strUsernamevROPs, $strvROPsInput)
-    $BSTR = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($strvROPsInput)
-    $strvRopsInsInput = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR)
+    #$BSTR = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($strvROPsInput)
+    #$strvRopsInsInput = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR)
     # Getting the Master Node hostname
     $strHostnameMaster = $objRawData.vrops.mainNodes.masterNode.hostname
     if (!$strHostnameMaster) { $msg = "ERROR - XML - No hostname set for masterNode"; fnLogData $msg $logfile; throw $msg }
@@ -375,20 +375,20 @@
     $blStopProcessing = $False
     if ($strRequestedClusterOp -eq "Online_Cluster"){
         # Attempting to bring the Cluster Online
-        $strClusterFinalState = fnClusterOps $strHostnameMaster "ONLINE" $objvROPsCreds $Null $strUsernamevROPs $strvRopsInsInput
+        $strClusterFinalState = fnClusterOps $strHostnameMaster "ONLINE" $objvROPsCreds $Null
         fnLogData "END - Cluster State is: $($strClusterFinalState.cluster_online_state_snapshot)" $logfile
         $blStopProcessing = $True
     } elseif ($strRequestedClusterOp -eq "Offline_Cluster"){
         # Taking the Cluster Offline
-        $strClusterFinalState = fnClusterOps $strHostnameMaster "OFFLINE" $objvROPsCreds
+        $strClusterFinalState = fnClusterOps $strHostnameMaster "OFFLINE" $objvROPsCreds $Null
         fnLogData "END - Cluster State is: $($strClusterFinalState.cluster_online_state_snapshot)" $logfile
         $blStopProcessing = $True
     } elseif ($strRequestedClusterOp -eq "Restart_Cluster"){
         # Restarting the Cluster
-        $strClusterOfflineState = fnClusterOps $strHostnameMaster "OFFLINE" $objvROPsCreds
+        $strClusterOfflineState = fnClusterOps $strHostnameMaster "OFFLINE" $objvROPsCreds $Null
         if ($strClusterOfflineState.cluster_online_state_snapshot -eq "OFFLINE"){
             fnLogData "INFO - Cluster State is now: $($strClusterOfflineState.cluster_online_state_snapshot)" $logfile
-            $strClusterFinalState = fnClusterOps $strHostnameMaster "ONLINE" $objvROPsCreds $Null $strUsernamevROPs $strvRopsInsInput
+            $strClusterFinalState = fnClusterOps $strHostnameMaster "ONLINE" $objvROPsCreds $Null
             if ($strClusterFinalState.cluster_online_state_snapshot -eq "ONLINE"){ fnLogData "END - vROPs Cluster restarted successfully" $logfile }
         } else {
             fnLogData "ERROR - Unable to bring Cluster Online. Current state of Cluster is: $($strClusterFinalState.cluster_online_state_snapshot)" $logfile
@@ -396,7 +396,7 @@
         $blStopProcessing = $True
     } elseif (($strRequestedClusterOp -match "Reboot") -or ($strRequestedClusterOp -match "Shutdown")){
         # Taking the Cluster Offline but continuing processing of the script
-        $strClusterFinalState = fnClusterOps $strHostnameMaster "OFFLINE" $objvROPsCreds
+        $strClusterFinalState = fnClusterOps $strHostnameMaster "OFFLINE" $objvROPsCreds $Null
         fnLogData "INFO - Current State of Cluster is: $($strClusterFinalState.cluster_online_state_snapshot)" $logfile
     } # end if
     # If there is no reboot operation pending we will end the script here
@@ -631,7 +631,7 @@
         fnLogData "INFO - Waiting 30 seconds before attempting Cluster Online operation" $logfile
         Start-Sleep -Seconds 30
         $strFinalClusterState = $Null
-        $strFinalClusterState = fnClusterOps $strHostnameMaster "ONLINE" $objvROPsCreds $Null $strUsernamevROPs $strvRopsInsInput
+        $strFinalClusterState = fnClusterOps $strHostnameMaster "ONLINE" $objvROPsCreds $Null
         fnLogData "INFO - Script ending. Request Operation: $strRequestedClusterOp" $logfile
         if ($strRequestedClusterOp -eq "Reboot_Main_Nodes_Bring_Cluster_Online"){
             fnLogData "INFO - vROPs Cluster Taken Offline. All Main Nodes restarted and vROPs Cluster brought Online" $logfile
