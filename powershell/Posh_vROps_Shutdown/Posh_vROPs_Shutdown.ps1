@@ -44,7 +44,7 @@
                 $logfilePath = "$strScriptPath\$logfileName"
             } else {
                 # If there is no log with this name we'll make one here
-                $objLogfile = New-Item "$strScriptPath\$logfileName" | Out-Null
+                $objLogfile = New-Item "$strScriptPath\$logfileName" -ItemType file | Out-Null
                 $logfilePath = "$strScriptPath\$logfileName"
                 fnLogData "INFO - Log file $logfile created at $(Get-Date)" $logFilePath
             } # end if
