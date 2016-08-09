@@ -360,8 +360,6 @@
     } # end if
     # Making a PSCredential Object for vROPs
     $objvROPsCreds = New-Object System.Management.Automation.PSCredential($strUsernamevROPs, $strvROPsInput)
-    #$BSTR = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($strvROPsInput)
-    #$strvRopsInsInput = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR)
     # Getting the Master Node hostname
     $strHostnameMaster = $objRawData.vrops.mainNodes.masterNode.hostname
     if (!$strHostnameMaster) { $msg = "ERROR - XML - No hostname set for masterNode"; fnLogData $msg $logfile; throw $msg }
