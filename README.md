@@ -1,6 +1,6 @@
 ## Synopsis
 
-These are not the scripts you're looking for
+These are not the scripts you are looking for
 
 ## Motivation
 
